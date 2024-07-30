@@ -1,15 +1,20 @@
-//import { keyboard } from "@testing-library/user-event/dist/keyboard";
+import { keyboard } from "@testing-library/user-event/dist/keyboard";
 import Todo from "./components/Todo"
 import Form from "./components/Form"
 import FilterButton from "./components/FilterButton";
 export default function App(props) {
+  function addTask(name) {
+    alert(name);
+  }
+
+
   const taskList = props.tasks.map((task) => (
     <Todo key={task.id} id={task.id} name={task.name} completed={task.completed} />
   ));
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
-      <Form />
+      <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">
         <FilterButton />
         <FilterButton />
