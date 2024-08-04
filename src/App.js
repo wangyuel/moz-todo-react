@@ -7,7 +7,25 @@ import { nanoid } from "nanoid";
 
 export default function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
+  const [filter, setFilter] = useState("All");
 
+
+  const FILTER_MAP = {
+    All: () => true,
+    Active: (task) => !task.completed,
+    Completed: (task) => task.completed,
+  };
+  const FILTER_NAMES = Object.keys(FILTER_MAP);
+  const filterList = FILTER_NAMES.map((name) => (
+    <FilterButton
+      key={name}
+      name={name}
+      isPressed={name === filter}
+      setFilter={setFilter}
+    />
+  ));
+  
+  
   function addTask(name) {
     const newTask = { id: `todo-${nanoid()}`, name, completed: false };//拼接一个字符串，需要用反引号然后加美元符号
     setTasks([...tasks, newTask]);//构造数组方式，。...把原本的数组元素添加进去，再把新的添加进去
@@ -45,7 +63,9 @@ export default function App(props) {
     setTasks(editedTaskList);
   }
   
-  const taskList = tasks.map((task) => (
+  const taskList = tasks
+  .filter(FILTER_MAP[filter])
+  .map((task) => (
     <Todo
       id={task.id}
       name={task.name}
@@ -56,6 +76,8 @@ export default function App(props) {
       editTask={editTask}
     />
   ));
+
+
   
   
 
@@ -68,9 +90,7 @@ export default function App(props) {
       <h1>TodoMatic</h1>
       <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">
-        <FilterButton />
-        <FilterButton />
-        <FilterButton />
+       {filterList}
       </div>
       <h2 id="list-heading">{headingText}</h2>
       <ul
