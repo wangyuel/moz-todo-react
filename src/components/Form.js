@@ -1,8 +1,12 @@
-import React from "react";
-import { useState } from "react";
+import React, { useRef } from "react";
+import { useState, useEffect } from "react";
 
 export default function Form(props) {
   const [name, setName] = useState("");
+  const inputRef=useRef(null);
+  useEffect(()=>{
+    inputRef.current.focus();
+  })
   function handleChange(event) {
     setName(event.target.value);
   }
@@ -27,6 +31,7 @@ export default function Form(props) {
         name="text"
         autoComplete="off"
         value={name}
+        ref={inputRef}
         onChange={handleChange}
       />
       <button type="submit" className="btn btn__primary btn__lg">
